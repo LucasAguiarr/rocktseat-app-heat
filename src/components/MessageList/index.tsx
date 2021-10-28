@@ -20,20 +20,18 @@ export const MessageList = () => {
   }, []);
 
   useEffect(() => {
-    const timer = setInterval(()=> {
-      if(messagesQueue.length > 0) {
-        setCurrentMessages(prevState => [messagesQueue[0], ...prevState!])
+    const timer = setInterval(() => {
+      if (messagesQueue.length > 0) {
+        setCurrentMessages(prevState => [messagesQueue[0], ...prevState!.slice(0, 10)]);
         messagesQueue.shift();
       }
-    }, 3000)
+    }, 3000);
 
-    return () => clearInterval(timer)
+    return () => clearInterval(timer);
   }, []);
 
   const fetchMessages = async () => {
-    const messagesResponse = await api.get<IMessageProps[]>(
-      "messages/last/100"
-    );
+    const messagesResponse = await api.get<IMessageProps[]>("messages/last/10");
 
     setCurrentMessages(messagesResponse.data);
   };
